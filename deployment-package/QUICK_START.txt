@@ -1,0 +1,49 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║                   QUEERZ! APPS - QUICK DEPLOYMENT                      ║
+║                         Bug Fixes v1.0                                 ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🎯 WHAT'S FIXED:
+  ✅ Combo Power now applies to dice rolls
+  ✅ Power Tags stay clicked until you press "Clear Dice"
+  ✅ Removed unused dice roller from MC App
+
+📦 FILES TO DEPLOY:
+  Player App: queerz-player-app/app.js
+  MC App:     queerz-mc-app/index.html
+
+⚡ FASTEST DEPLOYMENT METHOD:
+
+  1. PLAYER APP:
+     → Go to: github.com/benwieler-commits/queerz-player-app
+     → Click on app.js
+     → Click pencil icon to edit
+     → Replace ALL content with: deployment-package/queerz-player-app/app.js
+     → Commit: "Fix combo power and tag persistence"
+
+  2. MC APP:
+     → Go to: github.com/benwieler-commits/queerz-mc-app
+     → Click on index.html
+     → Click pencil icon to edit
+     → Replace ALL content with: deployment-package/queerz-mc-app/index.html
+     → Commit: "Remove dice roller"
+
+  3. WAIT 2-5 minutes for GitHub Pages to update
+
+  4. TEST:
+     → Player App: benwieler-commits.github.io/queerz-player-app
+     → MC App: benwieler-commits.github.io/queerz-mc-app
+     → Hard refresh (Ctrl+F5) if needed
+
+📖 DETAILED INSTRUCTIONS:
+  See DEPLOYMENT_GUIDE.md for complete deployment instructions
+
+📋 TECHNICAL DETAILS:
+  See CHANGES_SUMMARY.md for all code changes
+
+💾 BACKUPS:
+  Original files are in: backups/ directory
+
+════════════════════════════════════════════════════════════════════════
+
+Need help? Check DEPLOYMENT_GUIDE.md for troubleshooting!
