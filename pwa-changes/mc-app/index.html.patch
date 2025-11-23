@@ -1,5 +1,5 @@
 diff --git a/index.html b/index.html
-index 38105ef..ddb6b3a 100644
+index 38105ef..cc2156e 100644
 --- a/index.html
 +++ b/index.html
 @@ -4,6 +4,23 @@
@@ -35,7 +35,7 @@ index 38105ef..ddb6b3a 100644
 +    <script>
 +        if ('serviceWorker' in navigator) {
 +            window.addEventListener('load', () => {
-+                navigator.serviceWorker.register('/service-worker.js')
++                navigator.serviceWorker.register('./service-worker.js')
 +                    .then((registration) => {
 +                        console.log('ServiceWorker registration successful:', registration.scope);
 +                    })
