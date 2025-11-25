@@ -2071,42 +2071,45 @@ function updateCombosDisplay() {
 
 /**
  * Parse tag string from MC
- * Format: "Tag Name (±number) Temporary/Ongoing" OR "tag-name (+1 Temporary)"
- * Example: "Inspired (+2) Ongoing" or "mama-jays-blessing (+1 Temporary)"
+ * NEW FORMAT:
+ * - STATUS TAGS: "example-status-tag-1" through "example-status-tag-6" (numerical suffix 1-6, always Ongoing)
+ * - STORY TAGS: "example-story-tag" (no suffix, always Ongoing, no modifier)
+ * Examples: "weakened-2" (status), "guilty-4" (status), "investigating-the-crime" (story)
  */
 function parseTagFromMC(tagString) {
     console.log('🔍 Parsing tag string:', tagString);
 
-    // Try format 1: "Tag Name (±number) Temporary/Ongoing" with space before parenthesis
-    let match = tagString.match(/^(.+?)\s*\(([+-]?\d+)\)\s*(Temporary|Ongoing)$/i);
+    // NEW FORMAT (Current):
+    // STATUS TAGS: "example-status-tag-1" through "example-status-tag-6" (always Ongoing, numerical suffix 1-6)
+    // STORY TAGS: "example-story-tag" (always Ongoing, no modifier)
 
-    // Try format 2: "tag-name (+1 Temporary)" with number AND type inside parenthesis
-    if (!match) {
-        match = tagString.match(/^(.+?)\s*\(([+-]?\d+)\s+(Temporary|Ongoing)\)$/i);
-    }
+    // Check if tag ends with a numerical suffix (1-6) - indicates STATUS TAG
+    const statusMatch = tagString.match(/^(.+)-([1-6])$/);
 
-    if (match) {
-        const [, name, modifier, type] = match;
+    if (statusMatch) {
+        // STATUS TAG with tier 1-6
+        const [, name, tier] = statusMatch;
         const parsed = {
             name: name.trim(),
-            modifier: parseInt(modifier),
-            isTemporary: type.toLowerCase() === 'temporary',
-            isOngoing: type.toLowerCase() === 'ongoing',
+            modifier: parseInt(tier), // Tier 1-6 becomes the modifier
+            isTemporary: false,        // STATUS tags are always Ongoing
+            isOngoing: true,           // STATUS tags are always Ongoing
             rawString: tagString
         };
-        console.log('✅ Parsed successfully:', parsed);
+        console.log('✅ Parsed STATUS tag:', parsed);
         return parsed;
     }
 
-    // Fallback for tags without proper format
-    console.warn('⚠️ Could not parse tag format, using fallback:', tagString);
-    return {
-        name: tagString,
-        modifier: 0,
-        isTemporary: false,
-        isOngoing: false,
+    // If no numerical suffix, it's a STORY TAG (always Ongoing, no modifier)
+    const parsed = {
+        name: tagString.trim(),
+        modifier: 0,           // STORY tags have no modifier
+        isTemporary: false,    // STORY tags are always Ongoing
+        isOngoing: true,       // STORY tags are always Ongoing
         rawString: tagString
     };
+    console.log('✅ Parsed STORY tag:', parsed);
+    return parsed;
 }
 
 /**
@@ -3276,17 +3279,17 @@ document.head.appendChild(style);
 window.testAddTags = function() {
     console.log('🧪 Testing tag display with sample data...');
 
-    // Simulate MC sending tags
+    // Simulate MC sending tags with NEW FORMAT
     const testEvent = new CustomEvent('mc-tag-update', {
         detail: {
             statusTags: [
-                "Inspired (+2) Ongoing",
-                "Weakened (-1) Temporary",
-                "Focused (+1) Ongoing"
+                "inspired-2",    // Status tag with tier 2
+                "weakened-1",    // Status tag with tier 1
+                "focused-3"      // Status tag with tier 3
             ],
             storyTags: [
-                "Undercover (+1) Temporary",
-                "Suspicious (-2) Ongoing"
+                "undercover",              // Story tag (no modifier)
+                "investigating-the-crime"  // Story tag (no modifier)
             ]
         }
     });
@@ -3305,18 +3308,20 @@ window.testMCBroadcast = function() {
     const currentCharName = localStorage.getItem('currentCharacterName');
     console.log('  Current character name in localStorage:', currentCharName);
 
-    // Simulate the actual MC broadcast structure with ACTUAL format from MC
+    // Simulate the actual MC broadcast structure with NEW format from MC
     const mockBroadcast = {
         players: [
             {
                 name: currentCharName || "Test Character",
                 tags: {
                     status: [
-                        "mama-jays-blessing (+1 Temporary)",  // Actual MC format
-                        "weakened (-2 Ongoing)"               // Actual MC format
+                        "mama-jays-blessing-1",  // NEW FORMAT: Status tag with tier 1
+                        "weakened-2",            // NEW FORMAT: Status tag with tier 2
+                        "guilty-4"               // NEW FORMAT: Status tag with tier 4
                     ],
                     story: [
-                        "investigating-the-crime (+1 Temporary)"
+                        "investigating-the-crime",  // NEW FORMAT: Story tag (no modifier)
+                        "undercover-at-the-bar"     // NEW FORMAT: Story tag (no modifier)
                     ]
                 }
             }
